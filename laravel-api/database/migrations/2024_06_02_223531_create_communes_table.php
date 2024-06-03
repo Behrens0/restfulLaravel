@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('communes', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->integer('id_com', true);
+            $table->integer('id_reg')->index('fk_communes_region_idx');
+            $table->string('description', 90);
+            $table->enum('status', ['A', 'I', 'trash'])->default('A');
+
+            $table->primary(['id_com', 'id_reg']);
         });
     }
 

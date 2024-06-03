@@ -12,8 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tokens', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->integer('id_tok', true);
+            $table->string('token')->unique('token_unique')->comment('token');
+            $table->dateTime('login_time')->comment('Fecha de inicio del token');
+            $table->string('email', 120)->index('fk_tokens_customers_idx')->comment('Correo Electrónico');
+            $table->integer('random_value')->comment('Valor aleatorio del código');
         });
     }
 
