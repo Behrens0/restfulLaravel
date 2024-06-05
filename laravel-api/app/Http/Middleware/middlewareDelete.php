@@ -19,7 +19,8 @@ class middlewareDelete
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $validator = Validator::make($request->all(), [
+        $email = $request->route('email');
+        $validator = Validator::make(['email' => $email], [
             'email' => 'required|email',
         ]);
 
@@ -29,7 +30,7 @@ class middlewareDelete
         }
         
         // Find the customer by email
-        $customer = Customer::where('email', $request->email)->first();
+        $customer = Customer::where('email', $email)->first();
 
         if (!$customer || $customer->status === 'trash') {
             throw new HttpException(404, 'Registro no existe');

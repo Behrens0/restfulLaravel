@@ -26,7 +26,7 @@ Route::group(['prefix'=> 'V1', "namespace" => "App\Http\Controllers\Api\V1"], fu
 Route::group(['prefix' => 'customer'], function () {
     Route::post('/', [CustomerController::class, 'store'])->middleware('storeMiddleware')->name('customer.store');
     Route::get('{identifier}', [CustomerController::class, 'show'])->middleware('showMiddleware')->name('customer.show');
-    Route::delete('{customer}', [CustomerController::class, 'destroy'])->middleware('destroyMiddleware')->name('customer.destroy');
+    Route::delete('{email}', [CustomerController::class, 'destroy'])->middleware('destroyMiddleware')->name('customer.destroy');
 });
 
 Route::delete("customer_delete", function (Request $request) {

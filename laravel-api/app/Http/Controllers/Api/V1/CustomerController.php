@@ -22,7 +22,7 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $commune = Commune::where('id_com', $request->input('id_com'))->first();
-        $commune = Customer::create([
+        $customer = Customer::create([
             'dni' => $request->input('dni'),
             'id_reg' => $commune->id_reg,
             'id_com' => $request->input('id_com'),
@@ -31,18 +31,33 @@ class CustomerController extends Controller
             'last_name' => $request->input('last_name'),
             'address' => $request->input('address'),
         ]);
+        $time = date("h:i:sa");
+        $data=date("Y/m/d");
+        $token_encrypt = "{$customer->email}{$customer->dni}";
         return response()->json([
             'success' => true,
-            'data' => $commune,
+            'data' => $customer,
         ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $identifier)
+    public function show(Request $request, string $identifier)
     {
-        //
+        $foundBy = $request->foundBy;
+        $customer = Customer::where($foundBy, $identifier);
+        $data = [
+            'name' => $customer->name,
+            'last_name' => $customer->last_name,
+            'address' => $customer->address ?? null,
+            'region' => $customer->region->description,
+            'commune' => $customer->commune->description,
+        ];
+        return response()->json([
+            'success' => true,
+            'data' => $data,
+        ], 201); 
     }
 
     /**
@@ -56,8 +71,14 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        $user_to_delete = $request->attributes->get("customer");
+        $user_to_delete->status = "trash";
+        $user_to_delete->save();
+
+        return response()->json([
+            'success' => true,
+        ], 201); 
     }
 }

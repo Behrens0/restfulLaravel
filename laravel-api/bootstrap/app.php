@@ -5,7 +5,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use \App\Http\Middleware\middlewareDelete;
 use \App\Http\Middleware\logRequests;
-use \App\Http\Middleware\middleware_region;
+use \App\Http\Middleware\AuthenticationKeyMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -25,6 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api(append: [
             // middlewareDelete::class,
             logRequests::class,
+            AuthenticationKeyMiddleware::class,
             // middleware_region::class,
 
             // \App\Http\Middleware\CustomExceptionHandler::class,
