@@ -3,6 +3,9 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use \App\Http\Middleware\middlewareDelete;
+use \App\Http\Middleware\logRequests;
+use \App\Http\Middleware\middleware_region;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -13,9 +16,18 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // added to every http requestr
+        // $middleware->append(EnsureTokenIsValid::class);
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
+        ]);
+        $middleware->api(append: [
+            // middlewareDelete::class,
+            logRequests::class,
+            // middleware_region::class,
+
+            // \App\Http\Middleware\CustomExceptionHandler::class,
         ]);
 
         //
