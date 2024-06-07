@@ -12,6 +12,10 @@ use Exception;
 
 class ExceptionHandler extends Exception
 {
+    public function report(Throwable $exception)
+    {
+        parent::report($exception);
+    }
     public function render($request, Throwable $exception)
     {
         // Handle validation exceptions

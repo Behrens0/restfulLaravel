@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 use App\Models\Customer;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class middlewareDelete
+class MiddlewareToken
 {
     /**
      * Handle an incoming request.
@@ -19,24 +19,13 @@ class middlewareDelete
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $email = $request->route('customer');
-        $validator = Validator::make(['email' => $email], [
-            'email' => 'required|email',
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email|max:120|exists:customers, email',
         ]);
-
         if ($validator->fails()) {
-            // Return a response with validation errors
             throw new ValidationException($validator);
         }
-        
-        // Find the customer by email
-        $customer = Customer::where('email', $email)->first();
 
-        if (!$customer || $customer->status === 'trash') {
-            throw new HttpException(404, 'Registro no existe');
-        }
-
-        $request->attributes->add(['customer' => $customer]);
         return $next($request);
     }
 }

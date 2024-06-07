@@ -31,9 +31,7 @@ class CustomerController extends Controller
             'last_name' => $request->input('last_name'),
             'address' => $request->input('address'),
         ]);
-        $time = date("h:i:sa");
-        $data=date("Y/m/d");
-        $token_encrypt = "{$customer->email}{$customer->dni}";
+
         return response()->json([
             'success' => true,
             'data' => $customer,
@@ -43,16 +41,16 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, string $identifier)
+    public function show(Request $request, string $customer)
     {
         $foundBy = $request->foundBy;
-        $customer = Customer::where($foundBy, $identifier);
+        $customer2 = Customer::where($foundBy, $customer);
         $data = [
-            'name' => $customer->name,
-            'last_name' => $customer->last_name,
-            'address' => $customer->address ?? null,
-            'region' => $customer->region->description,
-            'commune' => $customer->commune->description,
+            'name' => $customer2->name,
+            'last_name' => $customer2->last_name,
+            'address' => $customer2->address ?? null,
+            'region' => $customer2->region->description,
+            'commune' => $customer2->commune->description,
         ];
         return response()->json([
             'success' => true,

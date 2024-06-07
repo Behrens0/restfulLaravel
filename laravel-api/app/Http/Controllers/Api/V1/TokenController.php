@@ -8,5 +8,27 @@ use App\Http\Controllers\Controller;
 
 class TokenController extends Controller
 {
-    //
+    public function store(Request $request)
+    {
+        $email = $request->input('email');
+        $time = date("h:i:sa");
+        $date=date("Y/m/d");
+        $dateSaved = "{$date}-{$time}";
+        $random_number = rand(200, 500); 
+        $token_encrypt = "{$email}{$date}{$time}{$random_number}";
+        $encrypted_token = sha1($token_encrypt);
+
+        $token = Token::create([
+            'token' => $encrypted_token,
+            'email' => $email,
+            'random_value' => $random_number,
+            'login_time' => $dateSaved,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => "Login succesful",
+        ], 201);
+
+    }
 }

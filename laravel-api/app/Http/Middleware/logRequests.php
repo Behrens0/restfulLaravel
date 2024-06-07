@@ -6,6 +6,9 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\App;
+ 
+
 
 class logRequests
 {
@@ -16,6 +19,7 @@ class logRequests
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $environment = App::environment();
         $log = [
             'URI' => $request->getUri(),
             'METHOD' => $request->getMethod(),
@@ -23,7 +27,6 @@ class logRequests
             'IP_address'=> $request->getClientIp(),
         ];
         Log::info(json_encode($log));
-
         $response = $next($request);
 
         if (app()->environment('local')) {

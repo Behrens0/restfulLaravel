@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Token extends Model
 {
     use HasFactory;
-    const CREATED_AT = 'login_time';
-    protected $primaryKey = 'id_tok';
 
-    protected $fillable = ['random_value', 'email', 'token'];
+    protected $primaryKey = 'id_tok';
+    public $timestamps = false;
+
+    protected $fillable = ['random_value', 'email', 'token', "login_time"];
 }

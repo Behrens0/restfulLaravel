@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use \App\Http\Middleware\middlewareDelete;
 use \App\Http\Middleware\logRequests;
 use \App\Http\Middleware\AuthenticationKeyMiddleware;
+use \App\Http\Middleware\MiddlewareUserToken;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
