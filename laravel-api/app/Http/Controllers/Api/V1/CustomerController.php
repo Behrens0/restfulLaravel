@@ -6,6 +6,7 @@ use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Models\Commune;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 class CustomerController extends Controller
 {
     /**
@@ -21,6 +22,7 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
+        Log::info("hola");
         $commune = Commune::where('id_com', $request->input('id_com'))->first();
         $customer = Customer::create([
             'dni' => $request->input('dni'),

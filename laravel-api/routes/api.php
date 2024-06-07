@@ -35,16 +35,20 @@ Route::get('/user', function (Request $request) {
 Route::middleware([MiddlewareUserToken::class])->group(function () {
     Route::post('commune', [CommuneController::class, 'store']);
     Route::post('login', [TokenController::class, 'store']);
-    Route::resource('customer', CustomerController::class)->only(['store']);
+    Route::delete('customer', [CustomerController::class, 'destroy']);
+    Route::get('customer', [CustomerController::class, 'show']);
     // Other routes...
 });
 Route::post('region', [RegionController::class, 'store'])->middleware(middleware_region::class);
 Route::post('commune', [CommuneController::class, 'store'])->middleware(MiddlewareCommune::class);
-Route::resource('customer', CustomerController::class)->except([
-    'create', 'index', 'update', 'edit'
-])->middleware([
-    'customer.destroy' => middlewareDelete::class,
-    'customer.show' => MiddlewareShow::class,
-    'customer.store' =>MiddlewareCreateCustomer::class,
-]);
+Route::post('customer', [CustomerController::class, 'store'])->middleware(MiddlewareCreateCustomer::class);
+Route::get('customer', [CustomerController::class, 'show'])->middleware(MiddlewareCommune::class);
+Route::delete('customer', [CustomerController::class, 'destroy'])->middleware(middlewareDelete::class);
+// Route::resource('customer', CustomerController::class)->except([
+//     'create', 'index', 'update', 'edit'
+// ])->middleware([
+//     'customer.destroy' => middlewareDelete::class,
+//     'customer.show' => MiddlewareShow::class,
+//     'customer' =>MiddlewareCreateCustomer::class,
+// ]);
 Route::post('login', [TokenController::class, 'store'])->middleware(MiddlewareToken::class);

@@ -12,10 +12,6 @@ use Exception;
 
 class ExceptionHandler extends Exception
 {
-    public function report(Throwable $exception)
-    {
-        parent::report($exception);
-    }
     public function render($request, Throwable $exception)
     {
         // Handle validation exceptions
@@ -35,11 +31,6 @@ class ExceptionHandler extends Exception
             ], $exception->getStatusCode());
         }
 
-        // Handle generic exceptions
-        return response()->json([
-            'success' => false,
-            'message' => 'Server error',
-            'detail' => $exception->getMessage(),
-        ], 500);
+
     }
 }

@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class MiddlewareCreateCustomer
 {
@@ -21,7 +22,7 @@ class MiddlewareCreateCustomer
         $validator = Validator::make($request->all(), [
             'address' => 'required|string|max:255',
             
-            'email' => 'required|string|email|max:120|unique:customers, email',
+            'email' => 'required|string|email|max:120|unique:customers,email',
             'id_com' => 'required|integer|exists:communes,id_com',
             'dni' => [
                 'required',
@@ -41,6 +42,7 @@ class MiddlewareCreateCustomer
             'name' => 'required|string|max:45',
         ]);
         if ($validator->fails()) {
+            Log::info(json_encode("Error"));
             throw new ValidationException($validator);
         }
         return $next($request);

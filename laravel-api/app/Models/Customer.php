@@ -8,13 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Customer extends Model
 {
     use HasFactory;
-    public $timestamps = false;
+    public $timestamps = true;
     protected $primaryKey = 'dni';
+
+    const UPDATED_AT = null;
     public $incrementing = false;
 
     const CREATED_AT = 'date_reg';
 
-    protected $fillable = ['dni', 'address', 'name', 'last_name' ,'id_com', 'email'];
+    protected $fillable = ['dni', 'address', 'name', 'last_name' ,'id_com', 'email', 'id_reg', 'date_reg'];
 
     public function commune()
     {
