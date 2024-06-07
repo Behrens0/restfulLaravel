@@ -42,8 +42,8 @@ Route::middleware([MiddlewareUserToken::class])->group(function () {
 Route::post('region', [RegionController::class, 'store'])->middleware(middleware_region::class);
 Route::post('commune', [CommuneController::class, 'store'])->middleware(MiddlewareCommune::class);
 Route::post('customer', [CustomerController::class, 'store'])->middleware(MiddlewareCreateCustomer::class);
-Route::get('customer', [CustomerController::class, 'show'])->middleware(MiddlewareCommune::class);
-Route::delete('customer', [CustomerController::class, 'destroy'])->middleware(middlewareDelete::class);
+Route::get('customer/{identifier}', [CustomerController::class, 'show'])->middleware(MiddlewareShow::class);
+Route::delete('customer/{email}', [CustomerController::class, 'destroy'])->middleware(middlewareDelete::class);
 // Route::resource('customer', CustomerController::class)->except([
 //     'create', 'index', 'update', 'edit'
 // ])->middleware([

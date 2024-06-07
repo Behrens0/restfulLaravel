@@ -5,14 +5,15 @@ namespace App\Http\Controllers\Api\V1;
 use Illuminate\Http\Request;
 use App\Models\Token;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Facades\Log;
 class TokenController extends Controller
 {
     public function store(Request $request)
     {
+        Log::info("hola");
         $email = $request->input('email');
-        $time = date("h:i:sa");
-        $date=date("Y/m/d");
+        $time = date("H:i:s");
+        $date=date("Y-m-d");
         $dateSaved = "{$date}-{$time}";
         $random_number = rand(200, 500); 
         $token_encrypt = "{$email}{$date}{$time}{$random_number}";

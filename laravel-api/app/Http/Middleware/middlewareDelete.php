@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use App\Models\Customer;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Support\Facades\Log;
 
 class middlewareDelete
 {
@@ -19,16 +20,13 @@ class middlewareDelete
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $email = $request->route('customer');
-        $validator = Validator::make(['email' => $email], [
-            'email' => 'required|email',
-        ]);
-
-        if ($validator->fails()) {
+        $email = $request->route('email');
+        Log::info("hola");
+        if (!$email) {
             // Return a response with validation errors
-            throw new ValidationException($validator);
+            throw ValidationException::withMessages(["Customer no Existe"]);
         }
-        
+        Log::info("hola");
         // Find the customer by email
         $customer = Customer::where('email', $email)->first();
 

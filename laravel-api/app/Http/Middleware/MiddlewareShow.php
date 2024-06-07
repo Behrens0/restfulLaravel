@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\DB;
 use App\Models\Customer;
+use Illuminate\Support\Facades\Log;
 
 class MiddlewareShow
 {
@@ -19,11 +20,12 @@ class MiddlewareShow
      */
     public function handle(Request $request, Closure $next): Response
     {
+        Log::info("hola");
         $identifier = $request->route('identifier');
         $customer = Customer::where('email', $identifier)
             ->orWhere('dni', $identifier)
             ->first();
-
+       
         if (!$customer) {
             throw ValidationException::withMessages(["Customer no Existe"]);
         }

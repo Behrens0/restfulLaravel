@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use App\Models\Customer;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Support\Facades\Log;
 
 class MiddlewareToken
 {
@@ -19,12 +20,14 @@ class MiddlewareToken
      */
     public function handle(Request $request, Closure $next): Response
     {
+        Log::info("hola");
         $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email|max:120|exists:customers, email',
+            'email' => 'required|string|email|max:120|exists:customers,email',
         ]);
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
+        Log::info("hola");
 
         return $next($request);
     }

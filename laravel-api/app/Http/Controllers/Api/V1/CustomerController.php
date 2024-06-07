@@ -43,10 +43,15 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, string $customer)
+    public function show(Request $request, string $identifier)
     {
-        $foundBy = $request->foundBy;
-        $customer2 = Customer::where($foundBy, $customer);
+        
+        $ident = (string)$identifier;
+        Log::info($ident);
+        $foundBy = $request->attributes->get('foundBy');
+        Log::info($foundBy);
+        $customer2 = Customer::where($foundBy, $ident)->first();
+        Log::info($customer2->name);
         $data = [
             'name' => $customer2->name,
             'last_name' => $customer2->last_name,
@@ -54,6 +59,8 @@ class CustomerController extends Controller
             'region' => $customer2->region->description,
             'commune' => $customer2->commune->description,
         ];
+
+        
         return response()->json([
             'success' => true,
             'data' => $data,
@@ -73,6 +80,7 @@ class CustomerController extends Controller
      */
     public function destroy(Request $request)
     {
+        Log::info('sdjfhs');
         $user_to_delete = $request->attributes->get("customer");
         $user_to_delete->status = "trash";
         $user_to_delete->save();
