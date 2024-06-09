@@ -44,11 +44,5 @@ Route::post('commune', [CommuneController::class, 'store'])->middleware(Middlewa
 Route::post('customer', [CustomerController::class, 'store'])->middleware(MiddlewareCreateCustomer::class);
 Route::get('customer/{identifier}', [CustomerController::class, 'show'])->middleware(MiddlewareShow::class);
 Route::delete('customer/{email}', [CustomerController::class, 'destroy'])->middleware(middlewareDelete::class);
-// Route::resource('customer', CustomerController::class)->except([
-//     'create', 'index', 'update', 'edit'
-// ])->middleware([
-//     'customer.destroy' => middlewareDelete::class,
-//     'customer.show' => MiddlewareShow::class,
-//     'customer' =>MiddlewareCreateCustomer::class,
-// ]);
+
 Route::post('login', [TokenController::class, 'store'])->middleware(MiddlewareToken::class);
