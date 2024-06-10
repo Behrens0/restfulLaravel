@@ -20,4 +20,9 @@ class CommuneController extends Controller
             'data' => $commune,
         ], 201);
     }
+
+    public function index() {
+        $communes = Commune::all();
+        return view('InitialView', compact('communes'));
+    }
 }

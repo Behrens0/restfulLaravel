@@ -32,17 +32,17 @@ Route::get('/user', function (Request $request) {
 //     Route::get('{identifier}', [CustomerController::class, 'show'])->middleware('showMiddleware')->name('customer.show');
 //     Route::delete('{email}', [CustomerController::class, 'destroy'])->middleware('destroyMiddleware')->name('customer.destroy');
 // });
-Route::middleware([MiddlewareUserToken::class])->group(function () {
-    Route::post('commune', [CommuneController::class, 'store']);
-    Route::post('login', [TokenController::class, 'store']);
-    Route::delete('customer', [CustomerController::class, 'destroy']);
-    Route::get('customer', [CustomerController::class, 'show']);
-    // Other routes...
-});
-Route::post('region', [RegionController::class, 'store'])->middleware(middleware_region::class);
-Route::post('commune', [CommuneController::class, 'store'])->middleware(MiddlewareCommune::class);
-Route::post('customer', [CustomerController::class, 'store'])->middleware(MiddlewareCreateCustomer::class);
-Route::get('customer/{identifier}', [CustomerController::class, 'show'])->middleware(MiddlewareShow::class);
-Route::delete('customer/{email}', [CustomerController::class, 'destroy'])->middleware(middlewareDelete::class);
+// Route::middleware([MiddlewareUserToken::class])->group(function () {
+//     Route::post('commune', [CommuneController::class, 'store']);
+//     Route::post('login', [TokenController::class, 'store']);
+//     Route::delete('customer', [CustomerController::class, 'destroy']);
+//     Route::get('customer', [CustomerController::class, 'show']);
+//     // Other routes...
+// });
+// Route::post('region', [RegionController::class, 'store'])->middleware(middleware_region::class);
+// Route::post('commune', [CommuneController::class, 'store'])->middleware(MiddlewareCommune::class);
+// Route::post('customer', [CustomerController::class, 'store'])->middleware(MiddlewareCreateCustomer::class);
+// Route::get('customer/{identifier}', [CustomerController::class, 'show'])->middleware(MiddlewareShow::class);
+// Route::delete('customer/{email}', [CustomerController::class, 'destroy'])->middleware(middlewareDelete::class);
 
-Route::post('login', [TokenController::class, 'store'])->middleware(MiddlewareToken::class);
+// Route::post('login', [TokenController::class, 'store'])->middleware(MiddlewareToken::class);

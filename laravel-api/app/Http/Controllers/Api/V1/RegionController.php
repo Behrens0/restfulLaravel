@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use Illuminate\Http\Request;
 use App\Models\Region;
 use App\Http\Controllers\Controller;
+use App\Models\Commune;
 use Illuminate\Support\Facades\Log;
 class RegionController extends Controller
 {
@@ -19,5 +20,11 @@ class RegionController extends Controller
             'success' => true,
             'data' => $region,
         ], 201);
+    }
+
+    public function index() {
+        $regions = Region::paginate(10);
+        $communes = Commune::paginate(10);
+        return view('InitialView', compact('regions', 'communes'));
     }
 }

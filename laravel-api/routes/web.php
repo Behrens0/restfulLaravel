@@ -1,5 +1,6 @@
 <?php
 
+namespace App\Http\Controllers\Api\V1;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -39,6 +40,10 @@ Route::post('customer', [CustomerController::class, 'store'])->middleware(Middle
 Route::get('customer/{identifier}', [CustomerController::class, 'show'])->middleware(MiddlewareShow::class);
 Route::delete('customer/{email}', [CustomerController::class, 'destroy'])->middleware(middlewareDelete::class);
 
+
+Route::get('/hola', "App\Http\Controllers\Api\V1\RegionController@index")->name("regions.index");
+
+
 Route::post('login', [TokenController::class, 'store'])->middleware(MiddlewareToken::class);
 
 Route::middleware([
@@ -49,8 +54,4 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
-});
-
-Route::get('/hola', function () {
-    return view('InitialView');
 });
