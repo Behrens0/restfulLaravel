@@ -53,7 +53,6 @@
     </div>
 
     <div class="content" id="content">
-        <!-- Dynamic content will be loaded here -->
         @yield('dynamic-content')
     </div>
 

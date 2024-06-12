@@ -10,7 +10,6 @@ class TokenController extends Controller
 {
     public function store(Request $request)
     {
-        Log::info("hola");
         $email = $request->input('email');
         $time = date("H:i:s");
         $date=date("Y-m-d");

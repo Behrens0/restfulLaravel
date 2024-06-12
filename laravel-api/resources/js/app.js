@@ -15,6 +15,9 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
+            .component('Dropdown', Dropdown)
+            .component('DropdownLink', DropdownLink)
+
             .mount(el);
     },
     progress: {

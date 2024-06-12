@@ -1,6 +1,5 @@
 <?php
-
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers\Api\V2;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -11,9 +10,11 @@ use App\Http\Controllers\Api\V1\RegionController;
 use App\Http\Controllers\Api\V1\CommuneController;
 use App\Http\Controllers\Api\V1\TokenController;
 use App\Http\Middleware\middleware_region;
+use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\MiddlewareCommune;
 use App\Http\Middleware\MiddlewareCreateCustomer;
 use App\Http\Middleware\middlewareDelete;
+use App\Http\Middleware\Register;
 use App\Http\Middleware\MiddlewareShow;
 use App\Http\Middleware\MiddlewareUserToken;
 use App\Http\Middleware\MiddlewareToken;
@@ -29,7 +30,6 @@ use App\Models\Customer;
 // });
 Route::middleware([MiddlewareUserToken::class])->group(function () {
     Route::post('commune', [CommuneController::class, 'store']);
-    Route::post('login', [TokenController::class, 'store']);
     Route::delete('customer', [CustomerController::class, 'destroy']);
     Route::get('customer', [CustomerController::class, 'show']);
     // Other routes...
@@ -41,17 +41,15 @@ Route::get('customer/{identifier}', [CustomerController::class, 'show'])->middle
 Route::delete('customer/{email}', [CustomerController::class, 'destroy'])->middleware(middlewareDelete::class);
 
 
-Route::get('/hola', "App\Http\Controllers\Api\V1\RegionController@index")->name("regions.index");
-
-
-Route::post('login', [TokenController::class, 'store'])->middleware(MiddlewareToken::class);
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+Route::get('/main', "App\Http\Controllers\Api\V1\RegionController@index")->name("main");
+Route::middleware(['auth'])->group(function () {
+    Route::get('/main', "App\Http\Controllers\Api\V1\RegionController@index")->name('main');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
+
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->middleware(Register::class);
+
+Route::get('/login1', "App\Http\Controllers\Api\V2\AuthController@showLoginForm")->name('login1');
+Route::post('/login', [AuthController::class, 'login']);
+

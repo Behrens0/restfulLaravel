@@ -11,6 +11,9 @@ use App\Models\Customer;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Support\Facades\Log;
 
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+
 class MiddlewareToken
 {
     /**
@@ -20,14 +23,17 @@ class MiddlewareToken
      */
     public function handle(Request $request, Closure $next): Response
     {
-        Log::info("hola");
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email|max:120|exists:customers,email',
+        $request->validate([
+            'email' => 'required|string|email|max:120|exists:users,email',
+
         ]);
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
+        $user = User::where('email', $request->email)->first();
+        if(!Hash::check($request->password, $user->password)) {
+            return back()->withErrors([
+                'password' => 'The provided credentials do not match our records.',
+            ])->withInput();
         }
-        Log::info("hola");
+
 
         return $next($request);
     }

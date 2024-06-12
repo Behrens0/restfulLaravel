@@ -1,4 +1,4 @@
-<!-- Modal for Create Region -->
+
 <div class="modal fade" id="createRegionModal" tabindex="-1" role="dialog" aria-labelledby="createRegionModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -10,16 +10,10 @@
             </div>
             <div class="modal-body">
                 <form id="createRegionForm">
-                    <!-- Form fields for creating a region -->
                     <div class="form-group">
                         <label for="regionName">Region Name</label>
                         <input type="text" class="form-control" id="regionName" name="regionName" required>
                     </div>
-                    <div class="form-group">
-                        <label for="regionDescription">Description</label>
-                        <input type="text" class="form-control" id="regionDescription" name="regionDescription" required>
-                    </div>
-                    <!-- Add other fields as necessary -->
                 </form>
             </div>
             <div class="modal-footer">
@@ -30,7 +24,6 @@
     </div>
 </div>
 
-<!-- Modal for Create Commune -->
 <div class="modal fade" id="createCommuneModal" tabindex="-1" role="dialog" aria-labelledby="createCommuneModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -42,20 +35,14 @@
             </div>
             <div class="modal-body">
                 <form id="createCommuneForm">
-                    <!-- Form fields for creating a commune -->
                     <div class="form-group">
                         <label for="communeName">Commune Name</label>
                         <input type="text" class="form-control" id="communeName" name="communeName" required>
                     </div>
                     <div class="form-group">
-                        <label for="communeDescription">Description</label>
-                        <input type="text" class="form-control" id="communeDescription" name="communeDescription" required>
-                    </div>
-                    <div class="form-group">
                         <label for="communeReg">Region ID</label>
                         <input type="text" class="form-control" id="communeReg" name="communeReg" required>
                     </div>
-                    <!-- Add other fields as necessary -->
                 </form>
             </div>
             <div class="modal-footer">

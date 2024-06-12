@@ -11,10 +11,9 @@ class RegionController extends Controller
 {
     public function store(Request $request)
     {
-        // Create a new region with the status set to 'A'
         $region = Region::create([
             'description' => $request->input('description'),
-            'status' => 'A', // Default status
+            'status' => 'A', 
         ]);
         return response()->json([
             'success' => true,
