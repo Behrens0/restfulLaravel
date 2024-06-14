@@ -1,4 +1,3 @@
-
 <div class="modal fade" id="createRegionModal" tabindex="-1" role="dialog" aria-labelledby="createRegionModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -12,7 +11,12 @@
                 <form id="createRegionForm">
                     <div class="form-group">
                         <label for="regionName">Region Name</label>
-                        <input type="text" class="form-control" id="regionName" name="regionName" required>
+                        <input type="text" class="form-control @error('regionName') is-invalid @enderror" id="regionName" name="regionName" required>
+                        @error('regionName')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
                 </form>
             </div>
@@ -37,11 +41,21 @@
                 <form id="createCommuneForm">
                     <div class="form-group">
                         <label for="communeName">Commune Name</label>
-                        <input type="text" class="form-control" id="communeName" name="communeName" required>
+                        <input type="text" class="form-control @error('communeName') is-invalid @enderror" id="communeName" name="communeName" required>
+                        @error('communeName')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
                     <div class="form-group">
                         <label for="communeReg">Region ID</label>
-                        <input type="text" class="form-control" id="communeReg" name="communeReg" required>
+                        <input type="text" class="form-control @error('communeReg') is-invalid @enderror" id="communeReg" name="communeReg" required>
+                        @error('communeReg')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
                 </form>
             </div>

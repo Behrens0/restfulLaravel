@@ -7,6 +7,7 @@ use \App\Http\Middleware\middlewareDelete;
 use \App\Http\Middleware\logRequests;
 use \App\Http\Middleware\AuthenticationKeyMiddleware;
 use \App\Http\Middleware\MiddlewareUserToken;
+use \App\Http\Middleware\Authenticate;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,7 +19,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'auth' => \App\Http\Middleware\Authenticate::class,
+            'auth' => Authenticate::class,
+            'bearerMiddleware' => MiddlewareUserToken::class,
         ]);
         
         // added to every http requestr

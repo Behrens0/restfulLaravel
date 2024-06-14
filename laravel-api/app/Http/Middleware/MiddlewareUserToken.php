@@ -2,15 +2,18 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Customer;
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use App\Models\Token;
-
+// use Illuminate\Contracts\Logging\Log;
+use Illuminate\Support\Facades\Log;
 
 class MiddlewareUserToken
 {
@@ -21,26 +24,31 @@ class MiddlewareUserToken
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $token = $request->headers->get('user-token');
+        $authorizationHeader = $request->headers->get('Authorization');
+        if (!$authorizationHeader || !preg_match('/Bearer\s(\S+)/', $authorizationHeader, $matches)) {
+            throw ValidationException::withMessages(['Authorization' => 'Token is required']);
+        }
+        $token = $matches[1];
+        Log::info('Request Headers: ' . json_encode($request->headers->all()));
+        Log::info($authorizationHeader);
+        Log::info(json_encode($token));
+
         $validator = Validator::make(['user-token' => $token], [
-            'user-token' => 'required|exists:tokens, token',
+            'user-token' => 'required|exists:tokens,token',
         ]);
         $tokenDetails = Token::where('token', $token)->first();
 
         $loginTime = $tokenDetails->login_time;
         $email = $tokenDetails->email;
-        $customer = Customer::where('email', $email)->first();
-        if ($customer->status != 'A') {
-            throw ValidationException::withMessages(["Usuario denegado"]);
-        }
-
-        $loginTime = Carbon::createFromFormat('Y/m/d-h:i:sa', $loginTime);
+        // $customer = User::where('email', $email)->first();
+        Log::info(json_encode($email));
+        $loginTime = Carbon::createFromFormat('Y-m-d H:i:s', $loginTime);
 
         $currentDateTime = Carbon::now();
 
-        // Check if it's the same day
-        if ($currentDateTime->isSameDay($loginTime) || $currentDateTime->diffInMinutes($loginTime) >= 30) {
-
+        if ($currentDateTime->isSameDay($loginTime) && $currentDateTime->diffInMinutes($loginTime) >= 30) {
+            Auth::logout();
+            Cookie::forget('encrypted_token');
             throw ValidationException::withMessages(["El token ha expirado"]);  
         }
         if ($validator->fails()) {

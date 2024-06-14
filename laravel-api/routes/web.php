@@ -40,16 +40,21 @@ Route::post('customer', [CustomerController::class, 'store'])->middleware(Middle
 Route::get('customer/{identifier}', [CustomerController::class, 'show'])->middleware(MiddlewareShow::class);
 Route::delete('customer/{email}', [CustomerController::class, 'destroy'])->middleware(middlewareDelete::class);
 
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout1');
 
 Route::get('/main', "App\Http\Controllers\Api\V1\RegionController@index")->name("main");
 Route::middleware(['auth'])->group(function () {
     Route::get('/main', "App\Http\Controllers\Api\V1\RegionController@index")->name('main');
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout1');
+});
+
+Route::middleware(['bearerMiddleware'])->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout1');
 });
 
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->middleware(Register::class);
 
 Route::get('/login1', "App\Http\Controllers\Api\V2\AuthController@showLoginForm")->name('login1');
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login2', [AuthController::class, 'login'])->name('login.process')->middleware(MiddlewareToken::class);
 

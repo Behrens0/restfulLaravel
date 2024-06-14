@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Token;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cookie;
 
 class AuthController extends Controller
 {
@@ -60,19 +61,30 @@ class AuthController extends Controller
 
             $request->session()->regenerate();
 
-            $cookie = cookie('encrypted_token', $encrypted_token, 60);
-            return redirect()->route('main')->withCookie($cookie);
+            $cookie = cookie('encrypted_token', $encrypted_token, 60, '/', null, false, false);
+            return response()->json(['redirectUrl' => route('main')])->withCookie($cookie);
         }
-
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
+        
+        return response()->json([
+            'errors' => [
+                'email' => ['The provided credentials do not match our records.'],
+                'password' => ['The provided credentials do not match our records.'],
+            ]
+        ], 422);
     }
 
     public function logout(Request $request)
     {
         Auth::logout();
-        return redirect()->route('login1');
+        $authorizationHeader = $request->headers->get('Authorization');
+        if (!$authorizationHeader || !preg_match('/Bearer\s(\S+)/', $authorizationHeader, $matches)) {
+            return response()->json([''=> ''])->withCookie('');
+        }
+        $token = $matches[1];
+        $tokenDetails = Token::where('token', $token)->first();
+        $tokenDetails->delete();
+        Cookie::forget('encrypted_token');//a
+        return response()->json(['redirectUrl' => route('login1')]);
     }
 
     public function dashboard()
