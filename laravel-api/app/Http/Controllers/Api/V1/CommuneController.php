@@ -9,11 +9,10 @@ class CommuneController extends Controller
 {
     public function store(Request $request)
     {
-        // Create a new commune with the status set to 'A'
         $commune = Commune::create([
-            'description' => $request->input('description'),
+            'description' => $request->communeName,
             'status' => 'A', 
-            'id_reg' => 1,
+            'id_reg' => $request->communeReg,
         ]);
         return response()->json([
             'success' => true,

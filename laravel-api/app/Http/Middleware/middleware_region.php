@@ -19,10 +19,14 @@ class middleware_region
     {
 
         $validator = Validator::make($request->all(), [
-            'description' => 'required|string|max:90',
+            'regionName' => 'required|string|max:90|unique:regions,description',
         ]);
         if ($validator->fails()) {
-            throw new ValidationException($validator);
+            return response()->json([
+                'errors' => [
+                    'regionName' => ['The provided region is not valid.'],
+                ]
+            ], 422);
         }
 
         return $next($request);

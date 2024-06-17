@@ -23,11 +23,9 @@ class middlewareDelete
         $email = $request->route('email');
         Log::info("hola");
         if (!$email) {
-            // Return a response with validation errors
             throw ValidationException::withMessages(["Customer no Existe"]);
         }
         Log::info("hola");
-        // Find the customer by email
         $customer = Customer::where('email', $email)->first();
 
         if (!$customer || $customer->status === 'trash') {

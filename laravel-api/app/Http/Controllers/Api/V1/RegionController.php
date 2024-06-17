@@ -12,7 +12,7 @@ class RegionController extends Controller
     public function store(Request $request)
     {
         $region = Region::create([
-            'description' => $request->input('description'),
+            'description' => $request->regionName,
             'status' => 'A', 
         ]);
         return response()->json([
@@ -22,8 +22,8 @@ class RegionController extends Controller
     }
 
     public function index() {
-        $regions = Region::paginate(10);
-        $communes = Commune::paginate(10);
+        $regions = Region::paginate(10, ['*'], 'regions_page');
+        $communes = Commune::paginate(10, ['*'], 'communes_page');
         return view('InitialView', compact('regions', 'communes'));
     }
 }

@@ -40,12 +40,12 @@ class MiddlewareToken
 
         if(!Hash::check($request->password, $user->password)) {
             $responseFlag = true;
-            $response['errors']['password'] = ['The provided credentials do not match our records.'];
-            return response()->json([
-                'errors' => [
-                    'password' => ['The provided email does not match our records.'],
-                ]
-            ], 422);
+            $response['errors']['password'] = ['The provided password does not match our records.'];
+            // return response()->json([
+            //     'errors' => [
+            //         'password' => ['The provided password does not match our records.'],
+            //     ]
+            // ], 422);
             
         }
 

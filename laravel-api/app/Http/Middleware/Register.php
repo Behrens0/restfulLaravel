@@ -22,11 +22,9 @@ class Register
                 'password' => 'required|string|min:4|confirmed',
             ]);
     
-            // If validation passes, proceed with the request
             return $next($request);
     
         } catch (\Illuminate\Validation\ValidationException $e) {
-            // If validation fails, return back with errors
             return back()->withErrors($e->errors())->withInput();
         }
     }

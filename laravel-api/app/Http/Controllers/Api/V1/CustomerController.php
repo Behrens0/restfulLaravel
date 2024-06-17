@@ -12,9 +12,10 @@ class CustomerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
+    public function index() {
+        // Fetch customers where status is not 'trash' and paginate the results
+        $customers = Customer::where('status', '!=', 'trash')->paginate(10);
+        return view('customer', compact('customers'));
     }
 
     /**
@@ -23,15 +24,15 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         Log::info("hola");
-        $commune = Commune::where('id_com', $request->input('id_com'))->first();
+        $commune = Commune::where('id_com', $request->customerCommune)->first();
         $customer = Customer::create([
-            'dni' => $request->input('dni'),
+            'dni' => $request->customerDni,
             'id_reg' => $commune->id_reg,
-            'id_com' => $request->input('id_com'),
-            'email' => $request->input('email'),
-            'name' => $request->input('name'),
-            'last_name' => $request->input('last_name'),
-            'address' => $request->input('address'),
+            'id_com' => $request->customerCommune,
+            'email' => $request->customerEmail,
+            'name' => $request->customerName,
+            'last_name' => $request->customerLastName,
+            'address' => $request->customerAddress,
         ]);
 
         return response()->json([
@@ -52,19 +53,27 @@ class CustomerController extends Controller
         Log::info($foundBy);
         $customer2 = Customer::where($foundBy, $ident)->first();
         Log::info($customer2->name);
-        $data = [
-            'name' => $customer2->name,
-            'last_name' => $customer2->last_name,
-            'address' => $customer2->address ?? null,
-            'region' => $customer2->region->description,
-            'commune' => $customer2->commune->description,
-        ];
-
-        
+        // $data = [
+        //     'name' => $customer2->name,
+        //     'last_name' => $customer2->last_name,
+        //     'address' => $customer2->address ?? null,
+        //     'region' => $customer2->region->description,
+        //     'commune' => $customer2->commune->description,
+        // ];
+        // $data2 = [
+        //     'email' => $customer2->email,
+        //     'name' => $customer2->name,
+        //     'last_name' => $customer2->last_name,
+        //     'address' => $customer2->address ?? null,
+        //     'region' => $customer2->id_reg,
+        //     'commune' => $customer2->id_com,
+        //     'dni' => $customer2->dni,
+        // ];
         return response()->json([
             'success' => true,
-            'data' => $data,
-        ], 201); 
+            'data' => $customer2,
+        ], 201);
+
     }
 
     /**

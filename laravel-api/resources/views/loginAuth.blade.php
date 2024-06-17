@@ -54,18 +54,17 @@
 <script>
     $(document).ready(function() {
         $('#login-form').on('submit', function(event) {
-            event.preventDefault(); // Prevent the default form submission
+            event.preventDefault(); 
 
             $.ajax({
                 url: $(this).attr('action'),
                 method: 'POST',
                 data: $(this).serialize(),
                 success: function(response) {
-                    // Handle successful response
+
                     window.location.href = response.redirectUrl;
                 },
                 error: function(xhr) {
-                    // Handle error response
                     if (xhr.status === 422) {
                         var errors = xhr.responseJSON.errors;
                         if (errors.email) {
@@ -81,6 +80,16 @@
                     }
                 }
             });
+        });
+
+        $('#email').on('input', function() {
+            $(this).removeClass('is-invalid');
+            $(this).siblings('.invalid-feedback').children('strong').text('');
+        });
+
+        $('#password').on('input', function() {
+            $(this).removeClass('is-invalid');
+            $(this).siblings('.invalid-feedback').children('strong').text('');
         });
     });
 </script>

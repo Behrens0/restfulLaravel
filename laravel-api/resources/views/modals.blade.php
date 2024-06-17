@@ -9,6 +9,7 @@
             </div>
             <div class="modal-body">
                 <form id="createRegionForm">
+                @csrf
                     <div class="form-group">
                         <label for="regionName">Region Name</label>
                         <input type="text" class="form-control @error('regionName') is-invalid @enderror" id="regionName" name="regionName" required>
@@ -39,6 +40,7 @@
             </div>
             <div class="modal-body">
                 <form id="createCommuneForm">
+                @csrf
                     <div class="form-group">
                         <label for="communeName">Commune Name</label>
                         <input type="text" class="form-control @error('communeName') is-invalid @enderror" id="communeName" name="communeName" required>

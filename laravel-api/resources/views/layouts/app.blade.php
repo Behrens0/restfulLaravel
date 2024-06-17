@@ -25,7 +25,7 @@
             background-color: #333;
             color: #fff;
             padding-top: 50px;
-            overflow-y: auto;
+
         }
         .sidebar a {
             display: block;
@@ -42,7 +42,7 @@
             padding: 20px;
             width: calc(100% - 200px);
             overflow-y: auto;
-            height: 100vh;
+            height: calc(100vh - 40px);
         }
         .top-right {
             position: fixed;
@@ -74,8 +74,8 @@
 </head>
 <body>
     <div class="sidebar">
-        <a href="#" data-page="Customers">Handle Customers</a>
-        <a href="#" data-page="Zone">Zone</a>
+        <a href="#" data-page="customer">Handle Customers</a>
+        <a href="#" data-page="main">Zones</a>
     </div>
 
     <div class="content" id="content">
@@ -97,6 +97,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
+
             const links = $('.sidebar a');
             const content = $('#content');
 
@@ -107,11 +108,24 @@
             });
 
             function loadPage(page) {
+                const encryptedToken = getCookie('encrypted_token');
                 $.ajax({
-                    url: `/${page}`,
+                    url: `{{ url('/') }}/${page}`,
                     method: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Authorization': `Bearer ${encryptedToken}`
+                    },
                     success: function(response) {
-                        content.html(response);
+                        if (page == "main")
+                        {
+                            window.location.href = "/main"
+                        }
+                        else
+                        {
+                            content.html(response);
+                        }
+                        
                     },
                     error: function(error) {
                         console.error('Error loading page:', error);

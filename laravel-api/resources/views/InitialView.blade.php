@@ -8,12 +8,12 @@
         font-size: 0.8rem;
     }
     .pagination .page-item .page-link .w-5.h-5 {
-        width: 0.2rem; 
+        width: 0.2rem;
         height: 0.2rem;
     }
     .pagination .page-item:first-child .page-link,
     .pagination .page-item:last-child .page-link {
-        border-radius: 0.2rem; 
+        border-radius: 0.2rem;
     }
 </style>
 <div class="container">
@@ -45,54 +45,58 @@
     <div class="row justify-content-center mt-4">
         <div class="col-md-6">
             <h4>Regions:</h4>
-            @if ($regions->isEmpty())
-                <p>No regions found.</p>
-            @else
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($regions as $region)
+            <div id="regionsList">
+                @if ($regions->isEmpty())
+                    <p>No regions found.</p>
+                @else
+                    <table class="table">
+                        <thead>
                             <tr>
-                                <td>{{ $region->id_reg }}</td>
-                                <td>{{ $region->description }}</td>
+                                <th>ID</th>
+                                <th>Description</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                {{ $regions->links() }}
-            @endif
+                        </thead>
+                        <tbody>
+                            @foreach ($regions as $region)
+                                <tr>
+                                    <td>{{ $region->id_reg }}</td>
+                                    <td>{{ $region->description }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    {{ $regions->appends(['communes_page' => request()->communes_page])->links() }}
+                @endif
+            </div>
         </div>
         
         <div class="col-md-6">
             <h4>Communes:</h4>
-            @if ($communes->isEmpty())
-                <p>No communes found.</p>
-            @else
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Description</th>
-                            <th>Region ID</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($communes as $commune)
+            <div id="communesList">
+                @if ($communes->isEmpty())
+                    <p>No communes found.</p>
+                @else
+                    <table class="table">
+                        <thead>
                             <tr>
-                                <td>{{ $commune->id_com }}</td>
-                                <td>{{ $commune->description }}</td>
-                                <td>{{ $commune->id_reg }}</td>
+                                <th>ID</th>
+                                <th>Description</th>
+                                <th>Region ID</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                {{ $communes->links() }}
-            @endif
+                        </thead>
+                        <tbody>
+                            @foreach ($communes as $commune)
+                                <tr>
+                                    <td>{{ $commune->id_com }}</td>
+                                    <td>{{ $commune->description }}</td>
+                                    <td>{{ $commune->id_reg }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    {{ $communes->appends(['regions_page' => request()->regions_page])->links() }}
+                @endif
+            </div>
         </div>
     </div>
 </div>
@@ -101,6 +105,12 @@
 @include('modals')
 
 <script>
+    $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+            
+        });
     $(document).ready(function() {
         $('#showCreateRegion').click(function () {
             $('#createRegionModal').modal('show');
@@ -111,10 +121,15 @@
         });
 
         $('#saveRegionBtn').click(function () {
+            const encryptedToken = getCookie('encrypted_token');
+            console.log(encryptedToken);
             $.ajax({
                 url: '{{ route("region.store") }}',
                 type: 'POST',
                 data: $('#createRegionForm').serialize(),
+                headers: {
+                    'Authorization': `Bearer ${encryptedToken}`
+                },
                 success: function(response) {
                     
                     $('#createRegionModal').modal('hide');
@@ -127,10 +142,15 @@
         });
 
         $('#saveCommuneBtn').click(function () {
+            const encryptedToken = getCookie('encrypted_token');
+            console.log(encryptedToken);
             $.ajax({
                 url: '{{ route("commune.store") }}',
                 type: 'POST',
                 data: $('#createCommuneForm').serialize(),
+                headers: {
+                    'Authorization': `Bearer ${encryptedToken}`
+                },
                 success: function(response) {
                     $('#createCommuneModal').modal('hide');
                     updateCommunes();
@@ -146,7 +166,20 @@
                 url: '{{ route("main") }}', 
                 type: 'GET',
                 success: function(data) {
-                    $('#regionsList').html(data);
+                    $('#regionsList').html($(data).find('#regionsList').html());
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        function updateCommunes() {
+            $.ajax({
+                url: '{{ route("main") }}', 
+                type: 'GET',
+                success: function(data) {
+                    $('#communesList').html($(data).find('#communesList').html());
                 },
                 error: function(error) {
                     console.error(error);

@@ -31,12 +31,9 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
         $middleware->api(append: [
-            // middlewareDelete::class,
             logRequests::class,
             AuthenticationKeyMiddleware::class,
-            // middleware_region::class,
 
-            // \App\Http\Middleware\CustomExceptionHandler::class,
         ]);
 
         //

@@ -19,11 +19,15 @@ class MiddlewareCommune
     {
         
         $validator = Validator::make($request->all(), [
-            'description' => 'required|string|max:90',
-            'id_reg' => 'required|integer|exists:regions,id_reg',
+            'communeName' => 'required|string|max:90|unique:communes,description',
+            'communeReg' => 'required|integer|exists:regions,id_reg',
         ]);
         if ($validator->fails()) {
-            throw new ValidationException($validator);
+            return response()->json([
+                'errors' => [
+                    'communeName' => ['The provided commune is not valid.'],
+                ]
+            ], 422);
         }
 
         return $next($request);

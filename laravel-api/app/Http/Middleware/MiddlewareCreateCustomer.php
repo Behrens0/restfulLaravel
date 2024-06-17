@@ -20,11 +20,11 @@ class MiddlewareCreateCustomer
     public function handle(Request $request, Closure $next): Response
     {
         $validator = Validator::make($request->all(), [
-            'address' => 'required|string|max:255',
+            'customerAddress' => 'required|string|max:255',
             
-            'email' => 'required|string|email|max:120|unique:customers,email',
-            'id_com' => 'required|integer|exists:communes,id_com',
-            'dni' => [
+            'customerEmail' => 'required|string|email|max:120|unique:customers,email',
+            'customerCommune' => 'required|integer|exists:communes,id_com',
+            'customerDni' => [
                 'required',
                 'string',
                 'max:45',
@@ -38,8 +38,8 @@ class MiddlewareCreateCustomer
                     }
                 },
             ],
-            'last_name' => 'required|string|max:45',
-            'name' => 'required|string|max:45',
+            'customerLastName' => 'required|string|max:45',
+            'customerName' => 'required|string|max:45',
         ]);
         if ($validator->fails()) {
             Log::info(json_encode("Error"));
